@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    options {
+        timestamps()
+    }    
     stages {
         stage('Build') {
             steps {
@@ -25,6 +28,7 @@ pipeline {
         }
         success {
             mail to:"ckline@livongo.com", subject:"SUCCESS: ${currentBuild.fullDisplayName}", body:"Build succeeded"
+            hipchatSend room: "Curtis_Test", message: "Build Complete: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
         }
     }
 }
