@@ -22,7 +22,6 @@ pipeline {
     post {
         always {
             archive "testfile.txt"
-            junit 'target/surefire-reports/*.xml'
         }
         success {
             mail to:"ckline@livongo.com", subject:"SUCCESS: ${currentBuild.fullDisplayName}", body:"Build succeeded"
