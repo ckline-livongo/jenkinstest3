@@ -4,6 +4,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'docker --version'
+                sh 'touch testfile.txt'
             }
         }
         stage('Test') {
@@ -15,6 +16,16 @@ pipeline {
             steps {
                 echo 'Deploying....'
             }
+        }
+        
+    }
+    post {
+        always {
+            archive "testfile.txt"
+            junit 'target/surefire-reports/*.xml'
+        }
+        success {
+            mail to:"ckline@livongo.com", subject:"SUCCESS: ${currentBuild.fullDisplayName}", body:"Build succeeded"
         }
     }
 }
