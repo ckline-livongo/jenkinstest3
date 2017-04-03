@@ -18,6 +18,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
+                sh 'cat files.txt'
             }
         }
         
@@ -28,7 +29,10 @@ pipeline {
         }
         success {
             mail to:"ckline@livongo.com", subject:"SUCCESS: ${currentBuild.fullDisplayName}", body:"Build succeeded"
-            hipchatSend room: "Curtis_Test", message: "Build Complete: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
+            hipchatSend room: "Curtis_Test", message: "Build Complete: ${env.JOB_NAME} build #${env.BUILD_NUMBER}"
         }
+        failure {
+            hipchatSend room: "Curtis_Test", message: "Build FAILED: ${env.JOB_NAME} build #${env.BUILD_NUMBER}"
+        }    
     }
 }
